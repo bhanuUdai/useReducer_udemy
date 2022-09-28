@@ -29,9 +29,10 @@ function App() {
 
   return (
       <AuthContext.Provider value={{
-        isLoggedIn:isLoggedIn
+        isLoggedIn:isLoggedIn,
+        onLogout:logoutHandler
     }}>
-        <MainHeader  onLogout={logoutHandler} />
+        <MainHeader  />
         <main>
           {!isLoggedIn && <Login onLogin={loginHandler} />}
           {isLoggedIn && <Home onLogout={logoutHandler} />}
@@ -41,3 +42,7 @@ function App() {
 }
 
 export default App;
+
+
+//here we can also pass function through context (i.e onLogout:logoutHandler)
+// This logoutHandler function is created here but getting evoked from Navigation.js
