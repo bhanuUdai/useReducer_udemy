@@ -1,8 +1,9 @@
-import React, { useState, useEffect, useReducer } from 'react';
+import React, { useState, useEffect, useReducer, useContext } from 'react';
 
 import Card from '../UI/Card/Card';
 import classes from './Login.module.css';
 import Button from '../UI/Button/Button';
+import AuthContext from '../../store/auth-context';
 
 const emailReducer=(state,action)=>
 {
@@ -37,6 +38,8 @@ const passwordReducer=(state,action)=>
 
 //here we are using useReducer for combining two states in one i.e enteredEmail , emailIsValid and same for enteredPassword and passwordIsValid
 
+
+
 const Login = (props) => {
   // const [enteredEmail, setEnteredEmail] = useState('');
   // const [emailIsValid, setEmailIsValid] = useState();
@@ -54,7 +57,8 @@ const Login = (props) => {
 
   const[passwordState,dispatchPassword]=useReducer(passwordReducer,{value:'',isValid:null})
 
-
+  const authCtx=useContext(AuthContext)
+  
   useEffect(() => {
     console.log('EFFECT RUNNING');
 
@@ -122,7 +126,7 @@ const{isValid:passwordIsValid}=passwordState
   const submitHandler = (event) => {
     event.preventDefault();
     // props.onLogin(enteredEmail, enteredPassword);
-    props.onLogin(emailstate.value, passwordState.value);
+    authCtx.onLogin(emailstate.value, passwordState.value);
   };
 
   return (
