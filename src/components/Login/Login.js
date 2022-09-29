@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useReducer, useContext } from "react";
+import React, { useState, useEffect, useReducer, useContext ,useRef } from "react";
 
 import Card from "../UI/Card/Card";
 import classes from "./Login.module.css";
@@ -54,6 +54,10 @@ const Login = (props) => {
   });
 
   const authCtx = useContext(AuthContext);
+
+  const emailRef=useRef()
+  const passRef=useRef()
+
 
   useEffect(() => {
     console.log("EFFECT RUNNING");
@@ -124,17 +128,33 @@ const Login = (props) => {
   const submitHandler = (event) => {
     event.preventDefault();
     // props.onLogin(enteredEmail, enteredPassword);
-    authCtx.onLogin(emailstate.value, passwordState.value);
+
+    if(formIsValid)
+    {
+      authCtx.onLogin(emailstate.value, passwordState.value);
+    }
+    else if(!emailIsValid)
+    {
+      emailRef.current.focused()
+    }
+    else
+    {
+      passRef.current.focused()
+    }
+    
   };
 
   return (
     <Card className={classes.login}>
       <form onSubmit={submitHandler}>
         <Input
+          ref={emailRef}
           id='email' label='E-Mail' type="email" isValid={emailstate.isValid}  value={emailstate.value} onChange={emailChangeHandler} onBlur={validateEmailHandler}>
         </Input>
 
-        <Input id="password" label ="Password" type="password" isValid={passwordState.isValid} value={passwordState.value} onChange={passwordChangeHandler} onBlur={validatePasswordHandler}></Input>
+        <Input
+        ref={passRef}
+        id="password" label ="Password" type="password" isValid={passwordState.isValid} value={passwordState.value} onChange={passwordChangeHandler} onBlur={validatePasswordHandler}></Input>
         {/* <div
           className={`${classes.control} ${
             passwordState.isValid === false ? classes.invalid : ""
@@ -150,7 +170,7 @@ const Login = (props) => {
           />
         </div> */}
         <div className={classes.actions}>
-          <Button type="submit" className={classes.btn} disabled={!formIsValid}>
+          <Button type="submit" className={classes.btn} >
             Login
           </Button>
         </div>
